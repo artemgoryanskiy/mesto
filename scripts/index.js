@@ -29,7 +29,7 @@ function createCard(cardData, deleteHandler) {
   return card;
 }
 
-initialCards.map((card, index) => document.querySelector('.places__list').append(createCard(card, () => deleteCard(index))))
+initialCards.forEach((card, index) => document.querySelector('.places__list').append(createCard(card, () => deleteCard(index))))
 
 
 
