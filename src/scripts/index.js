@@ -7,6 +7,8 @@
 // @todo: Функция удаления карточки
 
 // @todo: Вывести карточки на страницу
+import {initialCards} from './cards.js';
+import '../pages/index.css'
 
 function deleteCard(cardElement) {
   cardElement.remove();
