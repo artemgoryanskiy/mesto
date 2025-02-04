@@ -55,7 +55,6 @@ export default {
             {
                 test: /\.(woff2?|eot|ttf|otf)$/i,
                 type: 'asset/resource',
-                loader: 'url-loader',
                 generator: {
                     filename: 'fonts/[name][ext]',
                 }

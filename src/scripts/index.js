@@ -1,37 +1,39 @@
-// @todo: Темплейт карточки
+import '../pages/index.css';
+import {createCard, deleteCard, initialCards} from './cards.js';
+import {openModal, closeModal} from './modal.js';
 
-// @todo: DOM узлы
+const profileEditPopup = document.querySelector('.popup_type_edit');
+const newCardPopup = document.querySelector('.popup_type_new-card');
 
-// @todo: Функция создания карточки
+const profileEditButton = document.querySelector('.profile__edit-button');
+const profileAddButton = document.querySelector('.profile__add-button');
+const popupCloseClass = '.popup__close';
 
-// @todo: Функция удаления карточки
+initialCards.forEach((card) => document.querySelector('.places__list').append(createCard(card, deleteCard)));
 
-// @todo: Вывести карточки на страницу
-import {initialCards} from './cards.js';
-import '../pages/index.css'
+profileEditButton.addEventListener('click', (e) => {
+    openModal(profileEditPopup);
+});
 
-function deleteCard(cardElement) {
-  cardElement.remove();
+profileAddButton.addEventListener('click', (e) => {
+    openModal(newCardPopup);
+});
+
+closeModal(profileEditPopup);
+closeModal(newCardPopup);
+
+const formElement = document.forms['edit-profile'];
+const nameInput = formElement.querySelector('input[name="name"]');
+const jobInput = formElement.querySelector('input[name="description"]');
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
+nameInput.value = profileTitle.textContent
+jobInput.value = profileDescription.textContent
+
+function handleFormSubmit(evt) {
+    evt.preventDefault();
+    profileTitle.textContent = nameInput.value;
+    profileDescription.textContent = jobInput.value;
 }
 
-function createCard(cardData, onDeleteCard) {
-  const template = document.querySelector("#card-template").content;
-  const card = template.querySelector(".card").cloneNode(true);
-  const deleteButton = card.querySelector(".card__delete-button");
-  const image = card.querySelector(".card__image");
-  const title = card.querySelector(".card__title");
-
-  image.src = cardData.link;
-  image.alt = `Фотография места: ${cardData.name}`;
-  title.textContent = cardData.name;
-  
-  deleteButton.addEventListener("click", () => {
-    onDeleteCard(card);
-  });
-
-  return card;
-}
-
-initialCards.forEach((card) =>
-  document.querySelector(".places__list").append(createCard(card, deleteCard))
-);
+formElement.addEventListener('submit', handleFormSubmit);
