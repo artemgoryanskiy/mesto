@@ -1,4 +1,4 @@
-import {createCard, deleteCard} from "./cards.js";
+import {createCard, deleteCard, likeCard} from "./cards.js";
 
 const editProfileFormElement = document.forms['edit-profile'];
 const nameInput = editProfileFormElement.querySelector('input[name="name"]');
@@ -25,7 +25,7 @@ function handleNewCardFormSubmit(evt) {
         link: linkInput.value
     };
     evt.target.reset();
-    document.querySelector('.places__list').prepend(createCard(newCardElement, deleteCard))
+    document.querySelector('.places__list').prepend(createCard(newCardElement, deleteCard, likeCard))
 }
 
 export {editProfileFormElement, handleProfileFormSubmit, newCardFormElement, handleNewCardFormSubmit}
