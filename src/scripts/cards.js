@@ -1,3 +1,5 @@
+import {closeModal, openModal} from "./modal.js";
+
 export const initialCards = [
     {
         name: "Архыз",
@@ -33,13 +35,23 @@ function likeCard(element) {
     element.classList.toggle("card__like-button_is-active");
 }
 
-function createCard(cardData, onDeleteCard, onLikeCard) {
+function openCardImage(element) {
+    const elementImage = document.querySelector(".popup__image");
+    const elementCaption = document.querySelector(".popup__caption");
+    elementImage.src = document.querySelector(".card__image").src;
+    elementCaption.textContent = document.querySelector(".card__title").textContent;
+    openModal(element);
+    closeModal(element)
+}
+
+function createCard(cardData, onDeleteCard, onLikeCard, onOpenCardImage) {
     const template = document.querySelector("#card-template").content;
     const card = template.querySelector(".card").cloneNode(true);
     const deleteButton = card.querySelector(".card__delete-button");
     const likeButton = card.querySelector(".card__like-button");
     const image = card.querySelector(".card__image");
     const title = card.querySelector(".card__title");
+    const popupTypeImage = document.querySelector(".popup_type_image");
 
     image.src = cardData.link;
     image.alt = `Фотография места: ${cardData.name}`;
@@ -53,7 +65,11 @@ function createCard(cardData, onDeleteCard, onLikeCard) {
         onLikeCard(likeButton);
     })
 
+    image.addEventListener("click", () => {
+        onOpenCardImage(popupTypeImage)
+    })
+
     return card;
 }
 
-export {deleteCard, createCard, likeCard};
+export {deleteCard, createCard, likeCard, openCardImage};
