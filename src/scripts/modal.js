@@ -1,4 +1,4 @@
-export function openModal(modalElement) {
+function openModal(modalElement) {
     modalElement.classList.add('popup_is-opened');
 }
 
@@ -6,7 +6,7 @@ function hideModal(modalElement) {
     modalElement.classList.remove('popup_is-opened');
 }
 
-export function closeModal(modalElement) {
+function closeModal(modalElement) {
     const closeButton = modalElement.querySelector('.popup__close');
 
     function handleEscapeKey(event) {
@@ -41,3 +41,4 @@ export function closeModal(modalElement) {
     }
 }
 
+export {openModal, closeModal}
