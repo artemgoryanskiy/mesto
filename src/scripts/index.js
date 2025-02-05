@@ -1,5 +1,5 @@
 import '../pages/index.css';
-import {createCard, deleteCard, initialCards, likeCard, openCardImage} from './cards.js';
+import {createCard, deleteCard, initialCards, likeCard} from './cards.js';
 import {openModal, closeModal} from './modal.js';
 
 const popups = document.querySelectorAll('.popup');
@@ -19,6 +19,11 @@ const profileDescription = document.querySelector('.profile__description');
 const newCardFormElement = document.forms['new-place'];
 const placeNameInput = newCardFormElement.querySelector('input[name="place-name"]');
 const linkInput = newCardFormElement.querySelector('input[name="link"]');
+
+const popupTypeImage = document.querySelector(".popup_type_image");
+
+const elementImage = document.querySelector(".popup__image");
+const elementCaption = document.querySelector(".popup__caption");
 
 initialCards.forEach((card) => placesList.append(createCard(card, deleteCard, likeCard, openCardImage)));
 
@@ -59,7 +64,11 @@ function handleNewCardFormSubmit(evt) {
 editProfileFormElement.addEventListener('submit', handleProfileFormSubmit);
 newCardFormElement.addEventListener('submit', handleNewCardFormSubmit);
 
-
+function openCardImage(imageData) {
+    elementImage.src = imageData.link;
+    elementCaption.textContent = imageData.name;
+    openModal(popupTypeImage);
+}
 
 
 
