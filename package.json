@@ -1,8 +1,7 @@
 {
   "name": "mesto",
   "version": "1.0.0",
-  "main": "index.js",
-  "type": "module",
+  "main": "./src/scripts/index.js",
   "scripts": {
     "dev": "webpack serve",
     "build": "webpack"

@@ -1,13 +1,11 @@
-import {CleanWebpackPlugin} from 'clean-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import path from 'path';
-import {fileURLToPath} from 'url';
-import CopyPlugin from 'copy-webpack-plugin';
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default {
+module.exports = {
     mode: 'development',
     entry: path.resolve(__dirname, 'src', 'scripts', 'index.js'),
     output: {
@@ -15,10 +13,10 @@ export default {
         filename: 'index.[contenthash].js',
     },
     devServer: {
-        port: 8080,
-        hot: true,
-        open: true,
         compress: true,
+        port: 8080,
+        open: true,
+        hot: true,
     },
     plugins: [
         new CleanWebpackPlugin(),
@@ -31,9 +29,11 @@ export default {
         }),
         new CopyPlugin({
             patterns: [
-                { from:
+                {
+                    from:
                         path.resolve(__dirname, 'src', 'images'),
-                    to: path.resolve(__dirname, 'dist', 'images')},
+                    to: path.resolve(__dirname, 'dist', 'images')
+                },
 
             ],
         }),
@@ -66,4 +66,4 @@ export default {
             },
         ],
     },
-};
+}
