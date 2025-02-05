@@ -13,22 +13,23 @@ const newCardPopup = document.querySelector('.popup_type_new-card');
 
 const profileEditButton = document.querySelector('.profile__edit-button');
 const profileAddButton = document.querySelector('.profile__add-button');
+const placesList = document.querySelector('.places__list');
 
-
-initialCards.forEach((card) => document.querySelector('.places__list').append(createCard(card, deleteCard, likeCard, openCardImage)));
+initialCards.forEach((card) => placesList.append(createCard(card, deleteCard, likeCard, openCardImage)));
 
 profileEditButton.addEventListener('click', (e) => {
     openModal(profileEditPopup);
 });
-
 profileAddButton.addEventListener('click', (e) => {
     openModal(newCardPopup);
 });
 
-closeModal(profileEditPopup);
-closeModal(newCardPopup);
-
+function closeAllModals() {
+    closeModal(profileEditPopup);
+    closeModal(newCardPopup);
+}
 
 editProfileFormElement.addEventListener('submit', handleProfileFormSubmit);
 newCardFormElement.addEventListener('submit', handleNewCardFormSubmit);
 
+closeAllModals();

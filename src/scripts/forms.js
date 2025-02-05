@@ -1,12 +1,14 @@
-import {createCard, deleteCard, likeCard, openCardImage} from "./cards.js";
+import {createCard, deleteCard, likeCard, openCardImage} from './cards.js';
 
 const editProfileFormElement = document.forms['edit-profile'];
 const nameInput = editProfileFormElement.querySelector('input[name="name"]');
 const jobInput = editProfileFormElement.querySelector('input[name="description"]');
+
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
-nameInput.value = profileTitle.textContent
-jobInput.value = profileDescription.textContent
+
+nameInput.value = profileTitle.textContent;
+jobInput.value = profileDescription.textContent;
 
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
@@ -25,7 +27,8 @@ function handleNewCardFormSubmit(evt) {
         link: linkInput.value
     };
     evt.target.reset();
-    document.querySelector('.places__list').prepend(createCard(newCardElement, deleteCard, likeCard, openCardImage))
+    const cardElement = createCard(newCardElement, deleteCard, likeCard, openCardImage);
+    document.querySelector('.places__list').prepend(cardElement);
 }
 
-export {editProfileFormElement, handleProfileFormSubmit, newCardFormElement, handleNewCardFormSubmit}
+export {editProfileFormElement, handleProfileFormSubmit, newCardFormElement, handleNewCardFormSubmit};

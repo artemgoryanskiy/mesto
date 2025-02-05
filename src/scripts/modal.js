@@ -1,13 +1,19 @@
 function openModal(modalElement) {
     modalElement.classList.add('popup_is-opened');
+    modalElement.classList.remove('popup_is-animated');
 }
 
 function hideModal(modalElement) {
     modalElement.classList.remove('popup_is-opened');
+    modalElement.classList.add('popup_is-animated');
 }
 
 function closeModal(modalElement) {
     const closeButton = modalElement.querySelector('.popup__close');
+    document.removeEventListener('keydown', handleEscapeKey);
+    closeButton.removeEventListener('click', handleCloseBtnClick);
+    modalElement.removeEventListener('click', handleClickOverlay);
+    modalElement.removeEventListener('submit', handleSubmit);
 
     function handleEscapeKey(event) {
         if (event.key === 'Escape') {
