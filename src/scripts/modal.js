@@ -24,4 +24,4 @@ function handleClickOverlay(event) {
     }
 }
 
-export {openModal, closeModal}
+export {openModal, closeModal};

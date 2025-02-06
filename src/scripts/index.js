@@ -1,6 +1,7 @@
 import '../pages/index.css';
-import {createCard, deleteCard, initialCards, likeCard} from './cards.js';
+import {createCard, deleteCard, likeCard} from './card.js';
 import {openModal, closeModal} from './modal.js';
+import {initialCards} from './cards';
 
 const popups = document.querySelectorAll('.popup');
 const profileEditPopup = document.querySelector('.popup_type_edit');
@@ -20,10 +21,10 @@ const newCardFormElement = document.forms['new-place'];
 const placeNameInput = newCardFormElement.querySelector('input[name="place-name"]');
 const linkInput = newCardFormElement.querySelector('input[name="link"]');
 
-const popupTypeImage = document.querySelector(".popup_type_image");
+const popupTypeImage = document.querySelector('.popup_type_image');
 
-const elementImage = document.querySelector(".popup__image");
-const elementCaption = document.querySelector(".popup__caption");
+const elementImage = document.querySelector('.popup__image');
+const elementCaption = document.querySelector('.popup__caption');
 
 initialCards.forEach((card) => placesList.append(createCard(card, deleteCard, likeCard, openCardImage)));
 
@@ -37,11 +38,11 @@ profileAddButton.addEventListener('click', (e) => {
 });
 
 popups.forEach((popup) => {
-    const closeButton = popup.querySelector(".popup__close")
-    closeButton.addEventListener("click", () => {
+    const closeButton = popup.querySelector('.popup__close');
+    closeButton.addEventListener('click', () => {
         closeModal(popup);
     });
-})
+});
 
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
