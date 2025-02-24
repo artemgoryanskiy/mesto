@@ -29,14 +29,16 @@ const elementCaption = document.querySelector('.popup__caption');
 
 initialCards.forEach((card) => placesList.append(createCard(card, deleteCard, likeCard, openCardImage)));
 
-profileEditButton.addEventListener('click', (e) => {
+profileEditButton.addEventListener('click', () => {
     openModal(profileEditPopup);
     nameInput.value = profileTitle.textContent;
     jobInput.value = profileDescription.textContent;
     clearValidation(editProfileFormElement, validationConfig);
 });
-profileAddButton.addEventListener('click', (e) => {
+profileAddButton.addEventListener('click', () => {
     openModal(newCardPopup);
+    clearValidation(newCardFormElement, validationConfig);
+    newCardFormElement.reset();
 });
 
 popups.forEach((popup) => {

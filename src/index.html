@@ -83,20 +83,26 @@
           <form class="popup__form" name="new-place">
             <input
               type="text"
+              data-error="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               id="place-name"
               name="place-name"
               class="popup__input popup__input_type_card-name"
               placeholder="Название"
+              minlength="2"
+              maxlength="30"
               required
             />
             <span class="place-name-error"></span>
             <input
               type="url"
+              data-error="Введите правильный формат ссылки URL"
+              id="link"
               name="link"
               class="popup__input popup__input_type_url"
               placeholder="Ссылка на картинку"
               required
             />
+            <span class="link-error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
