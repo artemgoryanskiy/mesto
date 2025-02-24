@@ -1,7 +1,8 @@
 import '../pages/index.css';
 import {createCard, deleteCard, likeCard} from './card.js';
-import {openModal, closeModal} from './modal.js';
+import {closeModal, openModal} from './modal.js';
 import {initialCards} from './cards';
+import {clearValidation, enableValidation} from './validation.js';
 
 const popups = document.querySelectorAll('.popup');
 const profileEditPopup = document.querySelector('.popup_type_edit');
@@ -32,6 +33,7 @@ profileEditButton.addEventListener('click', (e) => {
     openModal(profileEditPopup);
     nameInput.value = profileTitle.textContent;
     jobInput.value = profileDescription.textContent;
+    clearValidation(editProfileFormElement, validationConfig);
 });
 profileAddButton.addEventListener('click', (e) => {
     openModal(newCardPopup);
@@ -44,12 +46,24 @@ popups.forEach((popup) => {
     });
 });
 
+const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+};
+
+enableValidation(validationConfig);
+
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
     profileTitle.textContent = nameInput.value;
     profileDescription.textContent = jobInput.value;
     closeModal(profileEditPopup);
 }
+
 
 function handleNewCardFormSubmit(evt) {
     evt.preventDefault();
