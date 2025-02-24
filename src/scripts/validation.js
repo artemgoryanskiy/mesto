@@ -3,7 +3,7 @@ function validateInput(inputElement, settings) {
 	const regex = /^[a-zA-Zа-яА-ЯёЁ\s-]*$/; // Допустимые символы: латиница, кириллица, пробелы, дефисы
 
 	// Получаем кастомное сообщение об ошибке из data-error атрибута
-	const customErrorMessage = inputElement.dataset.error || 'Ошибка валидации';
+	const customErrorMessage = inputElement.dataset.error;
 
 	// Если поле «Имя» или «Название» имеет недопустимые символы
 	if ((inputElement.id === 'name' || inputElement.id === 'description') && !regex.test(inputElement.value)) {

@@ -64,7 +64,6 @@ function handleProfileFormSubmit(evt) {
     closeModal(profileEditPopup);
 }
 
-
 function handleNewCardFormSubmit(evt) {
     evt.preventDefault();
     const newCardElement = {
