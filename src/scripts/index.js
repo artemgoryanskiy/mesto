@@ -85,10 +85,3 @@ function openCardImage(imageData) {
     elementCaption.textContent = imageData.name;
     openModal(popupTypeImage);
 }
-
-
-
-
-
-
-
