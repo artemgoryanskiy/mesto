@@ -1,8 +1,8 @@
 import '../pages/index.css';
 import {createCard, deleteCard, likeCard} from './card.js';
 import {closeModal, openModal} from './modal.js';
-import {initialCards} from './cards';
 import {clearValidation, enableValidation} from './validation.js';
+import {getCards, getUser, updateUserProfile} from "./api";
 
 const popups = document.querySelectorAll('.popup');
 const profileEditPopup = document.querySelector('.popup_type_edit');
@@ -17,6 +17,7 @@ const nameInput = editProfileFormElement.querySelector('input[name="name"]');
 const jobInput = editProfileFormElement.querySelector('input[name="description"]');
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
+const profileImage = document.querySelector('.profile__image');
 
 const newCardFormElement = document.forms['new-place'];
 const placeNameInput = newCardFormElement.querySelector('input[name="place-name"]');
@@ -27,7 +28,29 @@ const popupTypeImage = document.querySelector('.popup_type_image');
 const elementImage = document.querySelector('.popup__image');
 const elementCaption = document.querySelector('.popup__caption');
 
-initialCards.forEach((card) => placesList.append(createCard(card, deleteCard, likeCard, openCardImage)));
+const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__error_visible'
+};
+
+Promise.all([getUser(), getCards()]).then(([user, cards]) => {
+    const {name, about, avatar, _id } = user;
+    profileTitle.textContent = name;
+    profileDescription.textContent = about;
+    profileImage.style.backgroundImage = `url(${avatar})`
+
+    cards.forEach((card) => {
+        const {name, link, _id, owner} = card;
+        placesList.append(createCard(card, deleteCard, likeCard, openCardImage))
+    });
+});
+
+
+enableValidation(validationConfig);
 
 profileEditButton.addEventListener('click', () => {
     openModal(profileEditPopup);
@@ -35,6 +58,7 @@ profileEditButton.addEventListener('click', () => {
     jobInput.value = profileDescription.textContent;
     clearValidation(editProfileFormElement, validationConfig);
 });
+
 profileAddButton.addEventListener('click', () => {
     openModal(newCardPopup);
     clearValidation(newCardFormElement, validationConfig);
@@ -48,22 +72,20 @@ popups.forEach((popup) => {
     });
 });
 
-const validationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'popup__button_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__error_visible'
-};
-
-enableValidation(validationConfig);
-
 function handleProfileFormSubmit(evt) {
     evt.preventDefault();
     profileTitle.textContent = nameInput.value;
     profileDescription.textContent = jobInput.value;
-    closeModal(profileEditPopup);
+
+    updateUserProfile(nameInput.value, jobInput.value)
+        .then((updatedUser) => {
+            profileTitle.textContent = updatedUser.name;
+            profileDescription.textContent = updatedUser.about;
+            closeModal(profileEditPopup);
+        })
+        .catch((err) => {
+            console.error('Ошибка при обновлении профиля:', err);
+        });
 }
 
 function handleNewCardFormSubmit(evt) {
