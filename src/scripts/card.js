@@ -1,9 +1,27 @@
+import {config, dislikeCard, likeCard} from './api';
+
 function deleteCard(cardElement) {
     cardElement.remove();
 }
 
-function likeCard(element) {
-    element.classList.toggle('card__like-button_is-active');
+// function likeCard(element) {
+//     element.classList.toggle('card__like-button_is-active');
+// }
+
+function toggleLike(cardData, likeButton, likeCount) {
+    const cardId = cardData._id;
+    console.log(cardId);
+    const isLiked = likeButton.classList.contains('card__like-button_is-active');
+    const likeAction = isLiked ? dislikeCard(cardId) : likeCard(cardId);
+    likeAction
+        .then((updatedCard) => {
+            cardData.likes = updatedCard.likes;
+            likeCount.textContent = cardData.likes.length || '';
+            likeButton.classList.toggle('card__like-button_is-active');
+        })
+        .catch((err) => {
+            console.log(`Ошибка при обновлении лайка: ${err}`);
+        });
 }
 
 function createCard(cardData, onDeleteCard, onLikeCard, onOpenCardImage) {
@@ -11,6 +29,7 @@ function createCard(cardData, onDeleteCard, onLikeCard, onOpenCardImage) {
     const card = template.querySelector('.card').cloneNode(true);
     const deleteButton = card.querySelector('.card__delete-button');
     const likeButton = card.querySelector('.card__like-button');
+    const likeCount = card.querySelector('.card__like-counter');
     const image = card.querySelector('.card__image');
     const title = card.querySelector('.card__title');
 
@@ -18,13 +37,18 @@ function createCard(cardData, onDeleteCard, onLikeCard, onOpenCardImage) {
     image.src = cardData.link;
     image.alt = `Фотография места: ${cardData.name}`;
     title.textContent = cardData.name;
+    likeCount.textContent = cardData.likes.length || '';
+
+    if (cardData.likes.some(like => like._id === config.currentUserId)) {
+        likeButton.classList.add('card__like-button_is-active');
+    }
 
     deleteButton.addEventListener('click', () => {
         onDeleteCard(card);
     });
 
     likeButton.addEventListener('click', () => {
-        onLikeCard(likeButton);
+        onLikeCard(cardData, likeButton, likeCount);
     });
 
     image.addEventListener('click', () => {
@@ -34,4 +58,4 @@ function createCard(cardData, onDeleteCard, onLikeCard, onOpenCardImage) {
     return card;
 }
 
-export {deleteCard, createCard, likeCard};
+export {deleteCard, createCard, toggleLike};

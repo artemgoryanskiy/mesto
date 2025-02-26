@@ -1,6 +1,6 @@
 function validateInput(inputElement, settings) {
     const regex = /^[a-zA-Zа-яА-ЯёЁ\s-]*$/;
-    const urlRegex = /^(https?:\/\/)([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/
+    const urlRegex = /^(https?:\/\/)([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=%]*)?$/;
 
     const customErrorMessage = inputElement.dataset.error;
 

@@ -1,8 +1,8 @@
 import '../pages/index.css';
-import {createCard, deleteCard, likeCard} from './card.js';
+import {createCard, deleteCard, toggleLike} from './card.js';
 import {closeModal, openModal} from './modal.js';
 import {clearValidation, enableValidation} from './validation.js';
-import {getCards, getUser, updateUserProfile} from "./api";
+import {addCard, config, getCards, getUser, updateUserProfile} from './api';
 
 const popups = document.querySelectorAll('.popup');
 const profileEditPopup = document.querySelector('.popup_type_edit');
@@ -37,18 +37,19 @@ const validationConfig = {
     errorClass: 'popup__error_visible'
 };
 
-Promise.all([getUser(), getCards()]).then(([user, cards]) => {
-    const {name, about, avatar, _id } = user;
-    profileTitle.textContent = name;
-    profileDescription.textContent = about;
-    profileImage.style.backgroundImage = `url(${avatar})`
+Promise.all([getUser(), getCards()])
+    .then(([user, cards]) => {
+        const {name, about, avatar, _id} = user;
+        config.currentUserId = _id;
+        profileTitle.textContent = name;
+        profileDescription.textContent = about;
+        profileImage.style.backgroundImage = `url(${avatar})`;
 
-    cards.forEach((card) => {
-        const {name, link, _id, owner} = card;
-        placesList.append(createCard(card, deleteCard, likeCard, openCardImage))
-    });
+        cards.forEach((card) => {
+            const {name, link, _id, owner, likes} = card;
+            placesList.append(createCard(card, deleteCard, toggleLike, openCardImage));
+        });
 });
-
 
 enableValidation(validationConfig);
 
@@ -94,9 +95,13 @@ function handleNewCardFormSubmit(evt) {
         name: placeNameInput.value,
         link: linkInput.value
     };
-    const cardElement = createCard(newCardElement, deleteCard, likeCard, openCardImage);
-    document.querySelector('.places__list').prepend(cardElement);
-    closeModal(newCardPopup);
+    addCard(newCardElement)
+        .then((newCard) => {
+            console.log(newCard);
+            const cardElement = createCard(newCard, deleteCard, likeCard, openCardImage);
+            document.querySelector('.places__list').prepend(cardElement);
+            closeModal(newCardPopup);
+        });
 }
 
 editProfileFormElement.addEventListener('submit', handleProfileFormSubmit);
