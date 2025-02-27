@@ -1,8 +1,9 @@
 import '../pages/index.css';
+import pencil from '../images/pencil.svg';
 import {createCard, deleteCard, toggleLike} from './card.js';
 import {closeModal, openModal} from './modal.js';
 import {clearValidation, enableValidation} from './validation.js';
-import {addCard, config, getCards, getUser, updateUserAvatar, updateUserProfile} from './api';
+import {addCard, config, getCards, getUser, likeCard, updateUserAvatar, updateUserProfile} from './api';
 
 const popups = document.querySelectorAll('.popup');
 const profileEditPopup = document.querySelector('.popup_type_edit');
@@ -19,7 +20,6 @@ const jobInput = editProfileFormElement.querySelector('input[name="description"]
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const profileImage = document.querySelector('.profile__image');
-const avatarHover = '<img src=\'../../images/pencil.svg\' alt=\'avatar\'>';
 
 const newCardFormElement = document.forms['new-place'];
 const placeNameInput = newCardFormElement.querySelector('input[name="place-name"]');
@@ -50,7 +50,8 @@ Promise.all([getUser(), getCards()])
         profileImage.style.backgroundImage = `url(${avatar})`;
 
         profileImage.addEventListener('mousemove', () => {
-            profileImage.innerHTML = avatarHover;
+            profileImage.innerHTML = `
+                <img src='${pencil}' alt='avatar'>`;
 
         });
         profileImage.addEventListener('mouseleave', () => {
@@ -74,6 +75,7 @@ profileEditButton.addEventListener('click', () => {
 profileImage.addEventListener('click', () => {
     openModal(updateAvatarPopup);
     clearValidation(updateAvatarFormElement, validationConfig);
+    updateAvatarFormElement.reset();
 });
 
 profileAddButton.addEventListener('click', () => {
@@ -108,13 +110,18 @@ function handleProfileFormSubmit(evt) {
 function handleUpdateAvatarFormSubmit(evt) {
     evt.preventDefault();
     const avatar = updateAvatarFormElement.querySelector('input[name="avatar"]').value;
+    const submitButton = evt.target.querySelector('.popup__button');
+    submitButton.textContent = 'Сохраняем...';
     updateUserAvatar(avatar)
         .then((updatedUser) => {
             profileImage.style.backgroundImage = `url(${updatedUser.avatar})`;
             closeModal(updateAvatarPopup);
+
+            submitButton.textContent = 'Сохранить';
         })
         .catch((err) => {
             console.log(err);
+            submitButton.textContent = 'Сохранить';
         });
 }
 
