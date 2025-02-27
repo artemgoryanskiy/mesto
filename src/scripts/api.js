@@ -32,13 +32,58 @@ export function updateUserProfile(name, about) {
     })
         .then((res) => {
             if (!res.ok) {
-                throw new Error(`Ошибка: ${res.status}`);
+                throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
             }
-            return res.json(); // Возвращаем данные ответа от сервера, если запрос успешен
+            return res.json();
         })
         .catch((err) => {
             console.error('Ошибка обновления профиля:', err);
-            throw err; // Генерируем ошибку для обработки наверху
+            throw err;
+        });
+}
+
+function isValidImageUrl(url) {
+    return fetch(url, {method: 'HEAD'})
+        .then((res) => {
+            if (!res.ok) {
+                console.log(`Ошибка проверки URL: статус ${res.status}`
+                );
+                return false;
+            }
+            const contentType = res.headers.get('content-type');
+            return contentType && contentType.includes('image');
+        })
+        .catch((err) => {
+            console.log(`Ошибка проверки URL: статус ${err}`);
+            return false;
+        });
+}
+
+export function updateUserAvatar(avatar) {
+    return isValidImageUrl(avatar)
+        .then((isImage) => {
+            if (!isImage) {
+                return Promise.reject(
+                    'Ошибка: указанный URL недействителен или не является изображением.'
+                );
+            }
+            return fetch(`${config.baseUrl}/users/me/avatar`, {
+                method: 'PATCH',
+                headers: config.headers,
+                body: JSON.stringify({
+                    avatar: avatar,
+                }),
+            });
+        })
+        .then((response) => {
+            if (!response.ok) {
+                return Promise.reject(`Ошибка: ${response.status}`);
+            }
+            return response.json();
+        })
+        .catch((err) => {
+            console.error(`Ошибка при обновлении аватара: ${err}`);
+            throw err;
         });
 }
 

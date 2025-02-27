@@ -4,13 +4,8 @@ function deleteCard(cardElement) {
     cardElement.remove();
 }
 
-// function likeCard(element) {
-//     element.classList.toggle('card__like-button_is-active');
-// }
-
 function toggleLike(cardData, likeButton, likeCount) {
     const cardId = cardData._id;
-    console.log(cardId);
     const isLiked = likeButton.classList.contains('card__like-button_is-active');
     const likeAction = isLiked ? dislikeCard(cardId) : likeCard(cardId);
     likeAction
@@ -43,9 +38,13 @@ function createCard(cardData, onDeleteCard, onLikeCard, onOpenCardImage) {
         likeButton.classList.add('card__like-button_is-active');
     }
 
-    deleteButton.addEventListener('click', () => {
-        onDeleteCard(card);
-    });
+    if (cardData.owner._id !== config.currentUserId) {
+        deleteButton.remove();
+    } else {
+        deleteButton.addEventListener('click', () => {
+            onDeleteCard(card);
+        });
+    }
 
     likeButton.addEventListener('click', () => {
         onLikeCard(cardData, likeButton, likeCount);

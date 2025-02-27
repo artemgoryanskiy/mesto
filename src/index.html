@@ -76,6 +76,28 @@
         </div>
       </div>
 
+      <div class="popup popup_type_update-avatar">
+        <div class="popup__content">
+          <button class="popup__close" type="button"></button>
+          <h3 class="popup__title">Обновить аватар</h3>
+          <form class="popup__form" name="update-avatar">
+            <input
+                    class="popup__input popup__input_type_url"
+                    data-error="Введите правильный формат ссылки URL"
+                    id="avatar"
+                    name="avatar"
+                    placeholder="Ссылка на аватар"
+                    required
+                    type="url"
+            />
+            <span class="avatar-error"></span>
+            <button class="button popup__button" type="submit">
+              Сохранить
+            </button>
+          </form>
+        </div>
+      </div>
+
       <div class="popup popup_type_new-card">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>

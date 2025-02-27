@@ -2,10 +2,11 @@ import '../pages/index.css';
 import {createCard, deleteCard, toggleLike} from './card.js';
 import {closeModal, openModal} from './modal.js';
 import {clearValidation, enableValidation} from './validation.js';
-import {addCard, config, getCards, getUser, updateUserProfile} from './api';
+import {addCard, config, getCards, getUser, updateUserAvatar, updateUserProfile} from './api';
 
 const popups = document.querySelectorAll('.popup');
 const profileEditPopup = document.querySelector('.popup_type_edit');
+const updateAvatarPopup = document.querySelector('.popup_type_update-avatar');
 const newCardPopup = document.querySelector('.popup_type_new-card');
 
 const profileEditButton = document.querySelector('.profile__edit-button');
@@ -18,10 +19,13 @@ const jobInput = editProfileFormElement.querySelector('input[name="description"]
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const profileImage = document.querySelector('.profile__image');
+const avatarHover = '<img src=\'../../images/pencil.svg\' alt=\'avatar\'>';
 
 const newCardFormElement = document.forms['new-place'];
 const placeNameInput = newCardFormElement.querySelector('input[name="place-name"]');
 const linkInput = newCardFormElement.querySelector('input[name="link"]');
+
+const updateAvatarFormElement = document.forms['update-avatar'];
 
 const popupTypeImage = document.querySelector('.popup_type_image');
 
@@ -45,6 +49,13 @@ Promise.all([getUser(), getCards()])
         profileDescription.textContent = about;
         profileImage.style.backgroundImage = `url(${avatar})`;
 
+        profileImage.addEventListener('mousemove', () => {
+            profileImage.innerHTML = avatarHover;
+
+        });
+        profileImage.addEventListener('mouseleave', () => {
+            profileImage.innerHTML = '';
+        });
         cards.forEach((card) => {
             const {name, link, _id, owner, likes} = card;
             placesList.append(createCard(card, deleteCard, toggleLike, openCardImage));
@@ -58,6 +69,11 @@ profileEditButton.addEventListener('click', () => {
     nameInput.value = profileTitle.textContent;
     jobInput.value = profileDescription.textContent;
     clearValidation(editProfileFormElement, validationConfig);
+});
+
+profileImage.addEventListener('click', () => {
+    openModal(updateAvatarPopup);
+    clearValidation(updateAvatarFormElement, validationConfig);
 });
 
 profileAddButton.addEventListener('click', () => {
@@ -89,6 +105,19 @@ function handleProfileFormSubmit(evt) {
         });
 }
 
+function handleUpdateAvatarFormSubmit(evt) {
+    evt.preventDefault();
+    const avatar = updateAvatarFormElement.querySelector('input[name="avatar"]').value;
+    updateUserAvatar(avatar)
+        .then((updatedUser) => {
+            profileImage.style.backgroundImage = `url(${updatedUser.avatar})`;
+            closeModal(updateAvatarPopup);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
 function handleNewCardFormSubmit(evt) {
     evt.preventDefault();
     const newCardElement = {
@@ -106,6 +135,7 @@ function handleNewCardFormSubmit(evt) {
 
 editProfileFormElement.addEventListener('submit', handleProfileFormSubmit);
 newCardFormElement.addEventListener('submit', handleNewCardFormSubmit);
+updateAvatarFormElement.addEventListener('submit', handleUpdateAvatarFormSubmit);
 
 function openCardImage(imageData) {
     elementImage.src = imageData.link;

@@ -8,6 +8,7 @@ function validateInput(inputElement, settings) {
         'name': regex,
         'description': regex,
         'link': urlRegex,
+        'avatar': urlRegex,
         'place-name': regex,
     };
 
