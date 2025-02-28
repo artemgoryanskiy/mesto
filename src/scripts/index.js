@@ -49,6 +49,15 @@ function handleProfileEditClick() {
 	resetPopupForm(editProfileFormElement, validationConfig);
 	nameInput.value = profileTitle.textContent;
 	jobInput.value = profileDescription.textContent;
+	const submitButton = editProfileFormElement.querySelector(validationConfig.submitButtonSelector);
+	if (editProfileFormElement.checkValidity()) {
+		submitButton.classList.remove(validationConfig.inactiveButtonClass);
+		submitButton.disabled = false;
+	} else {
+		submitButton.classList.add(validationConfig.inactiveButtonClass);
+		submitButton.disabled = true;
+	}
+
 	openModal(profileEditPopup);
 }
 

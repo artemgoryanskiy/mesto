@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "webpack serve",
     "build": "webpack",
-    "deploy": "gh-pages -d dist -b main"
+    "deploy": "gh-pages -d dist -b main -r git@github.com:artemgoryanskiy/mesto.git"
   },
   "repository": {
     "type": "git",
