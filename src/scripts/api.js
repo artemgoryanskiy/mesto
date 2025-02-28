@@ -1,150 +1,100 @@
 export const config = {
-    baseUrl: 'https://nomoreparties.co/v1/wff-cohort-34',
-    headers: {
-        'Content-Type': 'application/json',
-        authorization: 'abcc240c-363b-4bdb-bb89-1350ab9a4d25'
-    },
-    currentUserId: null,
+	baseUrl: 'https://nomoreparties.co/v1/wff-cohort-34',
+	headers: {
+		'Content-Type': 'application/json',
+		authorization: 'abcc240c-363b-4bdb-bb89-1350ab9a4d25'
+	},
+	currentUserId: null,
+};
+
+const API_PATHS = {
+	users: '/users/me',
+	userAvatar: '/users/me/avatar',
+	cards: '/cards',
+	cardLikes: (cardId) => `/cards/likes/${cardId}`,
+	card: (cardId) => `/cards/${cardId}`,
+};
+
+function apiRequest(path, options = {}) {
+	return fetch(`${config.baseUrl}${path}`, {
+		headers: config.headers,
+		...options,
+	})
+		.then((res) => {
+			if (!res.ok) {
+				throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
+			}
+			return res.json();
+		})
+		.catch((err) => {
+			console.error(`Ошибка API: ${err.message}`);
+			throw err;
+		});
 }
 
-export function getUser(baseUrl = config.baseUrl, headers = config.headers) {
-    return fetch(`${baseUrl}/users/me`, {headers})
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
-            }
-            return res.json();
-        })
-        .catch(err => {
-            console.error("Ошибка:", err);
-            throw err;
-        });
+export function getUser() {
+	return apiRequest(API_PATHS.users);
 }
 
 export function updateUserProfile(name, about) {
-    return fetch(`${config.baseUrl}/users/me`, {
-        method: 'PATCH',
-        headers: config.headers,
-        body: JSON.stringify({
-            name: name,
-            about: about,
-        }),
-    })
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
-            }
-            return res.json();
-        })
-        .catch((err) => {
-            console.error('Ошибка обновления профиля:', err);
-            throw err;
-        });
+	return apiRequest(API_PATHS.users, {
+		method: 'PATCH',
+		body: JSON.stringify({
+			name: name,
+			about: about,
+		}),
+	});
 }
 
 function isValidImageUrl(url) {
-    return fetch(url, {method: 'HEAD'})
-        .then((res) => {
-            if (!res.ok) {
-                console.log(`Ошибка проверки URL: статус ${res.status}`
-                );
-                return false;
-            }
-            const contentType = res.headers.get('content-type');
-            return contentType && contentType.includes('image');
-        })
-        .catch((err) => {
-            console.log(`Ошибка проверки URL: статус ${err}`);
-            return false;
-        });
+	return fetch(url, {method: 'HEAD'})
+		.then((res) => res.ok && res.headers.get('content-type')?.includes('image'))
+		.catch(() => false);
 }
 
-export function updateUserAvatar(avatar) {
-    return isValidImageUrl(avatar)
-        .then((isImage) => {
-            if (!isImage) {
-                return Promise.reject(
-                    'Ошибка: указанный URL недействителен или не является изображением.'
-                );
-            }
-            return fetch(`${config.baseUrl}/users/me/avatar`, {
-                method: 'PATCH',
-                headers: config.headers,
-                body: JSON.stringify({
-                    avatar: avatar,
-                }),
-            });
-        })
-        .then((response) => {
-            if (!response.ok) {
-                return Promise.reject(`Ошибка: ${response.status}`);
-            }
-            return response.json();
-        })
-        .catch((err) => {
-            console.error(`Ошибка при обновлении аватара: ${err}`);
-            throw err;
-        });
+export function updateUserAvatar(avatarUrl) {
+	return isValidImageUrl(avatarUrl)
+		.then((isValid) => {
+			if (!isValid) {
+				throw new Error('Указанный URL недействителен или не является изображением.');
+			}
+			return apiRequest(API_PATHS.userAvatar, {
+				method: 'PATCH',
+				body: JSON.stringify({
+					avatar: avatarUrl,
+				}),
+			});
+		});
 }
 
-export function getCards(baseUrl = config.baseUrl, headers = config.headers) {
-    return fetch(`${baseUrl}/cards`, {headers})
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`HTTP Error: ${res.status} ${res.statusText}`);
-            }
-            return res.json();
-        })
-        .catch(err => {
-            console.log(err)
-            throw err;
-        })
+export function getCards() {
+	return apiRequest(API_PATHS.cards);
 }
 
-export function addCard(data) {
-    console.log(data);
-    return fetch(`${config.baseUrl}/cards`, {
-        method: 'POST',
-        headers: config.headers,
-        body: JSON.stringify({
-            name: data.name,
-            link: data.link,
-        }),
-    })
-        .then((res) => {
-            if (!res.ok) {
-                return Promise.reject(res.status);
-            }
-            return res.json();
-        })
-        .catch((err) => {
-            console.log(err);
-            throw err;
-        });
+export function addCard(cardData) {
+	return apiRequest(API_PATHS.cards, {
+		method: 'POST',
+		body: JSON.stringify({
+			name: cardData.name,
+			link: cardData.link,
+		}),
+	});
 }
 
 export function likeCard(cardId) {
-    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-        method: 'PUT',
-        headers: config.headers,
-    })
-        .then((res) => {
-            if (!res.ok) {
-                return Promise.reject(res.status);
-            }
-            return res.json();
-        });
+	return apiRequest(API_PATHS.cardLikes(cardId), {
+		method: 'PUT',
+	});
 }
 
 export function dislikeCard(cardId) {
-    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-        method: 'DELETE',
-        headers: config.headers,
-    })
-        .then((res) => {
-            if (!res.ok) {
-                return Promise.reject(res.status);
-            }
-            return res.json();
-        });
+	return apiRequest(API_PATHS.cardLikes(cardId), {
+		method: 'DELETE',
+	});
+}
+
+export function deleteCard(cardId) {
+	return apiRequest(API_PATHS.card(cardId), {
+		method: 'DELETE',
+	});
 }
