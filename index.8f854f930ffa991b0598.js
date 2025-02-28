@@ -1,0 +1,136 @@
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./src/scripts/api.js":
+/*!****************************!*\
+  !*** ./src/scripts/api.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   addCard: () => (/* binding */ addCard),\n/* harmony export */   config: () => (/* binding */ config),\n/* harmony export */   deleteCard: () => (/* binding */ deleteCard),\n/* harmony export */   dislikeCard: () => (/* binding */ dislikeCard),\n/* harmony export */   getCards: () => (/* binding */ getCards),\n/* harmony export */   getUser: () => (/* binding */ getUser),\n/* harmony export */   likeCard: () => (/* binding */ likeCard),\n/* harmony export */   updateUserAvatar: () => (/* binding */ updateUserAvatar),\n/* harmony export */   updateUserProfile: () => (/* binding */ updateUserProfile)\n/* harmony export */ });\nfunction _typeof(o) { \"@babel/helpers - typeof\"; return _typeof = \"function\" == typeof Symbol && \"symbol\" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && \"function\" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? \"symbol\" : typeof o; }, _typeof(o); }\nfunction ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }\nfunction _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }\nfunction _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }\nfunction _toPropertyKey(t) { var i = _toPrimitive(t, \"string\"); return \"symbol\" == _typeof(i) ? i : i + \"\"; }\nfunction _toPrimitive(t, r) { if (\"object\" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || \"default\"); if (\"object\" != _typeof(i)) return i; throw new TypeError(\"@@toPrimitive must return a primitive value.\"); } return (\"string\" === r ? String : Number)(t); }\nvar config = {\n  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-34',\n  headers: {\n    'Content-Type': 'application/json',\n    authorization: 'abcc240c-363b-4bdb-bb89-1350ab9a4d25'\n  },\n  currentUserId: null\n};\nvar API_PATHS = {\n  users: '/users/me',\n  userAvatar: '/users/me/avatar',\n  cards: '/cards',\n  cardLikes: function cardLikes(cardId) {\n    return \"/cards/likes/\".concat(cardId);\n  },\n  card: function card(cardId) {\n    return \"/cards/\".concat(cardId);\n  }\n};\nfunction apiRequest(path) {\n  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};\n  return fetch(\"\".concat(config.baseUrl).concat(path), _objectSpread({\n    headers: config.headers\n  }, options)).then(function (res) {\n    if (!res.ok) {\n      throw new Error(\"HTTP Error: \".concat(res.status, \" \").concat(res.statusText));\n    }\n    return res.json();\n  }).catch(function (err) {\n    console.error(\"\\u041E\\u0448\\u0438\\u0431\\u043A\\u0430 API: \".concat(err.message));\n    throw err;\n  });\n}\nfunction getUser() {\n  return apiRequest(API_PATHS.users);\n}\nfunction updateUserProfile(name, about) {\n  return apiRequest(API_PATHS.users, {\n    method: 'PATCH',\n    body: JSON.stringify({\n      name: name,\n      about: about\n    })\n  });\n}\nfunction isValidImageUrl(url) {\n  return fetch(url, {\n    method: 'HEAD'\n  }).then(function (res) {\n    var _res$headers$get;\n    return res.ok && ((_res$headers$get = res.headers.get('content-type')) === null || _res$headers$get === void 0 ? void 0 : _res$headers$get.includes('image'));\n  }).catch(function () {\n    return false;\n  });\n}\nfunction updateUserAvatar(avatarUrl) {\n  return isValidImageUrl(avatarUrl).then(function (isValid) {\n    if (!isValid) {\n      throw new Error('Указанный URL недействителен или не является изображением.');\n    }\n    return apiRequest(API_PATHS.userAvatar, {\n      method: 'PATCH',\n      body: JSON.stringify({\n        avatar: avatarUrl\n      })\n    });\n  });\n}\nfunction getCards() {\n  return apiRequest(API_PATHS.cards);\n}\nfunction addCard(cardData) {\n  return apiRequest(API_PATHS.cards, {\n    method: 'POST',\n    body: JSON.stringify({\n      name: cardData.name,\n      link: cardData.link\n    })\n  });\n}\nfunction likeCard(cardId) {\n  return apiRequest(API_PATHS.cardLikes(cardId), {\n    method: 'PUT'\n  });\n}\nfunction dislikeCard(cardId) {\n  return apiRequest(API_PATHS.cardLikes(cardId), {\n    method: 'DELETE'\n  });\n}\nfunction deleteCard(cardId) {\n  return apiRequest(API_PATHS.card(cardId), {\n    method: 'DELETE'\n  });\n}\n\n//# sourceURL=webpack://mesto/./src/scripts/api.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/card.js":
+/*!*****************************!*\
+  !*** ./src/scripts/card.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   createCard: () => (/* binding */ createCard),\n/* harmony export */   handleLikeToggle: () => (/* binding */ handleLikeToggle)\n/* harmony export */ });\n/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./api */ \"./src/scripts/api.js\");\n\nfunction handleLikeToggle(cardData, likeButton, likeCounter) {\n  var cardId = cardData._id;\n  var isLiked = likeButton.classList.contains('card__like-button_is-active');\n  var likeAction = isLiked ? (0,_api__WEBPACK_IMPORTED_MODULE_0__.dislikeCard)(cardId) : (0,_api__WEBPACK_IMPORTED_MODULE_0__.likeCard)(cardId);\n  likeAction.then(function (updatedCard) {\n    cardData.likes = updatedCard.likes;\n    likeCounter.textContent = cardData.likes.length || '';\n    likeButton.classList.toggle('card__like-button_is-active');\n  }).catch(function (err) {\n    console.log(\"\\u041E\\u0448\\u0438\\u0431\\u043A\\u0430 \\u043F\\u0440\\u0438 \\u043E\\u0431\\u043D\\u043E\\u0432\\u043B\\u0435\\u043D\\u0438\\u0438 \\u043B\\u0430\\u0439\\u043A\\u0430: \".concat(err));\n  });\n}\nfunction initializeLikeButton(cardData, likeButton, likeCounter, onLikeCard) {\n  if (cardData.likes.some(function (like) {\n    return like._id === _api__WEBPACK_IMPORTED_MODULE_0__.config.currentUserId;\n  })) {\n    likeButton.classList.add('card__like-button_is-active');\n  }\n  likeButton.addEventListener('click', function () {\n    onLikeCard(cardData, likeButton, likeCounter);\n  });\n}\nfunction createCard(cardData, onDeleteCard, onLikeCard, onOpenCardImage) {\n  var template = document.querySelector('#card-template').content;\n  var card = template.querySelector('.card').cloneNode(true);\n  var deleteButton = card.querySelector('.card__delete-button');\n  var likeButton = card.querySelector('.card__like-button');\n  var likeCounter = card.querySelector('.card__like-counter');\n  var image = card.querySelector('.card__image');\n  var title = card.querySelector('.card__title');\n  image.src = cardData.link;\n  image.alt = \"\\u0424\\u043E\\u0442\\u043E\\u0433\\u0440\\u0430\\u0444\\u0438\\u044F \\u043C\\u0435\\u0441\\u0442\\u0430: \".concat(cardData.name);\n  title.textContent = cardData.name;\n  likeCounter.textContent = cardData.likes.length || '';\n  initializeLikeButton(cardData, likeButton, likeCounter, onLikeCard);\n  if (cardData.owner._id !== _api__WEBPACK_IMPORTED_MODULE_0__.config.currentUserId) {\n    deleteButton.remove();\n  } else {\n    deleteButton.addEventListener('click', function () {\n      onDeleteCard(cardData, card);\n    });\n  }\n  image.addEventListener('click', function () {\n    onOpenCardImage(cardData);\n  });\n  return card;\n}\n\n\n//# sourceURL=webpack://mesto/./src/scripts/card.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/index.js":
+/*!******************************!*\
+  !*** ./src/scripts/index.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _pages_index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../pages/index.css */ \"./src/pages/index.css\");\n/* harmony import */ var _card_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./card.js */ \"./src/scripts/card.js\");\n/* harmony import */ var _modal_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modal.js */ \"./src/scripts/modal.js\");\n/* harmony import */ var _validation_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./validation.js */ \"./src/scripts/validation.js\");\n/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./api */ \"./src/scripts/api.js\");\nfunction _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.\"); }\nfunction _unsupportedIterableToArray(r, a) { if (r) { if (\"string\" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return \"Object\" === t && r.constructor && (t = r.constructor.name), \"Map\" === t || \"Set\" === t ? Array.from(r) : \"Arguments\" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }\nfunction _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }\nfunction _iterableToArrayLimit(r, l) { var t = null == r ? null : \"undefined\" != typeof Symbol && r[Symbol.iterator] || r[\"@@iterator\"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }\nfunction _arrayWithHoles(r) { if (Array.isArray(r)) return r; }\n\n\n\n\n\nvar popups = document.querySelectorAll('.popup');\nvar profileEditPopup = document.querySelector('.popup_type_edit');\nvar updateAvatarPopup = document.querySelector('.popup_type_update-avatar');\nvar newCardPopup = document.querySelector('.popup_type_new-card');\nvar deleteCardPopup = document.querySelector('.popup_type_delete-card');\nvar confirmDeleteButton = deleteCardPopup.querySelector('.popup__button');\nvar profileEditButton = document.querySelector('.profile__edit-button');\nvar profileAddButton = document.querySelector('.profile__add-button');\nvar placesList = document.querySelector('.places__list');\nvar editProfileFormElement = document.forms['edit-profile'];\nvar nameInput = editProfileFormElement.querySelector('input[name=\"name\"]');\nvar jobInput = editProfileFormElement.querySelector('input[name=\"description\"]');\nvar profileTitle = document.querySelector('.profile__title');\nvar profileDescription = document.querySelector('.profile__description');\nvar profileImage = document.querySelector('.profile__image');\nvar newCardFormElement = document.forms['new-place'];\nvar updateAvatarFormElement = document.forms['update-avatar'];\nvar popupTypeImage = document.querySelector('.popup_type_image');\nvar elementImage = document.querySelector('.popup__image');\nvar elementCaption = document.querySelector('.popup__caption');\nvar validationConfig = {\n  formSelector: '.popup__form',\n  inputSelector: '.popup__input',\n  submitButtonSelector: '.popup__button',\n  inactiveButtonClass: 'popup__button_disabled',\n  inputErrorClass: 'popup__input_type_error',\n  errorClass: 'popup__error_visible'\n};\nvar cardToDelete = null;\nfunction resetPopupForm(formElement, validation) {\n  (0,_validation_js__WEBPACK_IMPORTED_MODULE_3__.clearValidation)(formElement, validation);\n  formElement.reset();\n}\nfunction updateSubmitButtonState(submitButton, isLoading) {\n  submitButton.textContent = isLoading ? 'Сохранение...' : 'Сохранить';\n}\nfunction handleProfileEditClick() {\n  resetPopupForm(editProfileFormElement, validationConfig);\n  nameInput.value = profileTitle.textContent;\n  jobInput.value = profileDescription.textContent;\n  (0,_modal_js__WEBPACK_IMPORTED_MODULE_2__.openModal)(profileEditPopup);\n}\nfunction handleAddCardClick() {\n  resetPopupForm(newCardFormElement, validationConfig);\n  (0,_modal_js__WEBPACK_IMPORTED_MODULE_2__.openModal)(newCardPopup);\n}\nfunction handleAvatarClick() {\n  resetPopupForm(updateAvatarFormElement, validationConfig);\n  (0,_modal_js__WEBPACK_IMPORTED_MODULE_2__.openModal)(updateAvatarPopup);\n}\nfunction openCardImage(imageData) {\n  elementImage.src = imageData.link;\n  elementCaption.textContent = imageData.name;\n  (0,_modal_js__WEBPACK_IMPORTED_MODULE_2__.openModal)(popupTypeImage);\n}\nfunction onDeletePopup(cardData, cardElement) {\n  cardToDelete = {\n    cardData: cardData,\n    cardElement: cardElement\n  };\n  (0,_modal_js__WEBPACK_IMPORTED_MODULE_2__.openModal)(deleteCardPopup);\n}\nfunction handleEditProfile(evt) {\n  evt.preventDefault();\n  var submitButton = evt.target.querySelector('.popup__button');\n  updateSubmitButtonState(submitButton, true);\n  (0,_api__WEBPACK_IMPORTED_MODULE_4__.updateUserProfile)(nameInput.value, jobInput.value).then(function (updatedUser) {\n    profileTitle.textContent = updatedUser.name;\n    profileDescription.textContent = updatedUser.about;\n    (0,_modal_js__WEBPACK_IMPORTED_MODULE_2__.closeModal)(profileEditPopup);\n  }).catch(function (err) {\n    return console.error('Ошибка при обновлении профиля:', err);\n  }).finally(function () {\n    updateSubmitButtonState(submitButton, false);\n  });\n}\nfunction handleNewCardSubmit(evt) {\n  evt.preventDefault();\n  var submitButton = evt.target.querySelector('.popup__button');\n  updateSubmitButtonState(submitButton, true);\n  var newCardData = {\n    name: newCardFormElement['place-name'].value,\n    link: newCardFormElement['link'].value\n  };\n  (0,_api__WEBPACK_IMPORTED_MODULE_4__.addCard)(newCardData).then(function (newCard) {\n    placesList.prepend((0,_card_js__WEBPACK_IMPORTED_MODULE_1__.createCard)(newCard, onDeletePopup, _card_js__WEBPACK_IMPORTED_MODULE_1__.handleLikeToggle, openCardImage));\n    (0,_modal_js__WEBPACK_IMPORTED_MODULE_2__.closeModal)(newCardPopup);\n  }).catch(function (err) {\n    return console.error('Ошибка при добавлении карточки:', err);\n  }).finally(function () {\n    updateSubmitButtonState(submitButton, false);\n  });\n}\nfunction handleAvatarSubmit(evt) {\n  evt.preventDefault();\n  var submitButton = evt.target.querySelector('.popup__button');\n  var avatarUrl = updateAvatarFormElement.avatar.value;\n  updateSubmitButtonState(submitButton, true);\n  (0,_api__WEBPACK_IMPORTED_MODULE_4__.updateUserAvatar)(avatarUrl).then(function (updatedUser) {\n    profileImage.style.backgroundImage = \"url(\".concat(updatedUser.avatar, \")\");\n    (0,_modal_js__WEBPACK_IMPORTED_MODULE_2__.closeModal)(updateAvatarPopup);\n  }).catch(function (err) {\n    return console.error('Ошибка при обновлении аватара:', err);\n  }).finally(function () {\n    updateSubmitButtonState(submitButton, false);\n  });\n}\nfunction handleConfirmDelete() {\n  if (!cardToDelete || !cardToDelete.cardData) {\n    console.error('Ошибка: данных для удаления нет.');\n    return;\n  }\n  (0,_api__WEBPACK_IMPORTED_MODULE_4__.deleteCard)(cardToDelete.cardData._id).then(function () {\n    cardToDelete.cardElement.remove();\n    cardToDelete = null;\n    (0,_modal_js__WEBPACK_IMPORTED_MODULE_2__.closeModal)(deleteCardPopup);\n  }).catch(function (err) {\n    return console.error('Ошибка при удалении карточки:', err);\n  });\n}\nPromise.all([(0,_api__WEBPACK_IMPORTED_MODULE_4__.getUser)(), (0,_api__WEBPACK_IMPORTED_MODULE_4__.getCards)()]).then(function (_ref) {\n  var _ref2 = _slicedToArray(_ref, 2),\n    user = _ref2[0],\n    cards = _ref2[1];\n  var name = user.name,\n    about = user.about,\n    avatar = user.avatar,\n    _id = user._id;\n  _api__WEBPACK_IMPORTED_MODULE_4__.config.currentUserId = _id;\n  profileTitle.textContent = name;\n  profileDescription.textContent = about;\n  profileImage.style.backgroundImage = \"url(\".concat(avatar, \")\");\n  cards.forEach(function (card) {\n    placesList.append((0,_card_js__WEBPACK_IMPORTED_MODULE_1__.createCard)(card, onDeletePopup, _card_js__WEBPACK_IMPORTED_MODULE_1__.handleLikeToggle, openCardImage));\n  });\n}).catch(function (err) {\n  console.error(\"\\u041E\\u0448\\u0438\\u0431\\u043A\\u0430 \\u043F\\u0440\\u0438 \\u0437\\u0430\\u0433\\u0440\\u0443\\u0437\\u043A\\u0435 \\u0434\\u0430\\u043D\\u043D\\u044B\\u0445: \".concat(err));\n});\n(0,_validation_js__WEBPACK_IMPORTED_MODULE_3__.enableValidation)(validationConfig);\nprofileEditButton.addEventListener('click', handleProfileEditClick);\nprofileAddButton.addEventListener('click', handleAddCardClick);\nprofileImage.addEventListener('click', handleAvatarClick);\nconfirmDeleteButton.addEventListener('click', handleConfirmDelete);\neditProfileFormElement.addEventListener('submit', handleEditProfile);\nnewCardFormElement.addEventListener('submit', handleNewCardSubmit);\nupdateAvatarFormElement.addEventListener('submit', handleAvatarSubmit);\npopups.forEach(function (popup) {\n  var closeButton = popup.querySelector('.popup__close');\n  closeButton.addEventListener('click', function () {\n    (0,_modal_js__WEBPACK_IMPORTED_MODULE_2__.closeModal)(popup);\n  });\n});\n\n//# sourceURL=webpack://mesto/./src/scripts/index.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/modal.js":
+/*!******************************!*\
+  !*** ./src/scripts/modal.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   closeModal: () => (/* binding */ closeModal),\n/* harmony export */   openModal: () => (/* binding */ openModal)\n/* harmony export */ });\nfunction openModal(modalElement) {\n  modalElement.classList.add('popup_is-opened');\n  modalElement.classList.remove('popup_is-animated');\n  document.addEventListener('keydown', handleEscapeKey);\n  modalElement.addEventListener('click', handleClickOverlay);\n}\nfunction closeModal(modalElement) {\n  modalElement.classList.remove('popup_is-opened');\n  modalElement.classList.add('popup_is-animated');\n  document.removeEventListener('keydown', handleEscapeKey);\n  modalElement.removeEventListener('click', handleClickOverlay);\n}\nfunction handleEscapeKey(event) {\n  if (event.key === 'Escape') {\n    closeModal(document.querySelector('.popup_is-opened'));\n  }\n}\nfunction handleClickOverlay(event) {\n  if (event.target === event.currentTarget) {\n    closeModal(event.target);\n  }\n}\n\n\n//# sourceURL=webpack://mesto/./src/scripts/modal.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/validation.js":
+/*!***********************************!*\
+  !*** ./src/scripts/validation.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   clearValidation: () => (/* binding */ clearValidation),\n/* harmony export */   enableValidation: () => (/* binding */ enableValidation)\n/* harmony export */ });\nfunction validateInput(inputElement, settings) {\n  var regex = /^[a-zA-Zа-яА-ЯёЁ\\s-]*$/;\n  var urlRegex = /^(https?:\\/\\/)([\\w\\-]+\\.)+[\\w\\-]+(\\/[\\w\\-._~:/?#[\\]@!$&'()*+,;=%]*)?$/;\n  var customErrorMessage = inputElement.dataset.error;\n  var validationRules = {\n    'name': regex,\n    'description': regex,\n    'link': urlRegex,\n    'avatar': urlRegex,\n    'place-name': regex\n  };\n  if (validationRules[inputElement.id] && !validationRules[inputElement.id].test(inputElement.value)) {\n    inputElement.setCustomValidity(customErrorMessage);\n    console.log(inputElement.id);\n    console.log(customErrorMessage);\n    console.log(inputElement.value);\n  } else {\n    inputElement.setCustomValidity('');\n  }\n  showInputError(inputElement, settings);\n}\nfunction showInputError(inputElement, settings) {\n  var errorElement = inputElement.closest('form').querySelector(\".\".concat(inputElement.id, \"-error\"));\n  errorElement.textContent = inputElement.validationMessage;\n  if (inputElement.validationMessage) {\n    inputElement.classList.add(settings.inputErrorClass);\n    errorElement.classList.add(settings.errorClass);\n  } else {\n    inputElement.classList.remove(settings.inputErrorClass);\n    errorElement.classList.remove(settings.errorClass);\n  }\n}\nfunction hideInputError(inputElement, settings) {\n  var errorElement = inputElement.closest('form').querySelector(\".\".concat(inputElement.id, \"-error\"));\n  errorElement.textContent = '';\n  inputElement.classList.remove(settings.inputErrorClass);\n  errorElement.classList.remove(settings.errorClass);\n}\nfunction toggleButtonState(inputList, buttonElement, settings) {\n  var hasInvalidInput = inputList.some(function (inputElement) {\n    return !inputElement.validity.valid;\n  });\n  if (hasInvalidInput) {\n    buttonElement.classList.add(settings.inactiveButtonClass);\n    buttonElement.disabled = true;\n  } else {\n    buttonElement.classList.remove(settings.inactiveButtonClass);\n    buttonElement.disabled = false;\n  }\n}\nfunction setEventListeners(formElement, settings) {\n  var inputList = Array.from(formElement.querySelectorAll(settings.inputSelector));\n  var buttonElement = formElement.querySelector(settings.submitButtonSelector);\n  toggleButtonState(inputList, buttonElement, settings);\n  inputList.forEach(function (inputElement) {\n    inputElement.addEventListener('input', function () {\n      validateInput(inputElement, settings);\n      toggleButtonState(inputList, buttonElement, settings);\n    });\n  });\n}\nfunction clearValidation(formElement, settings) {\n  var inputList = Array.from(formElement.querySelectorAll(settings.inputSelector));\n  var buttonElement = formElement.querySelector(settings.submitButtonSelector);\n  inputList.forEach(function (inputElement) {\n    hideInputError(inputElement, settings);\n    inputElement.setCustomValidity('');\n  });\n  toggleButtonState(inputList, buttonElement, settings);\n}\nfunction enableValidation(settings) {\n  var formList = Array.from(document.querySelectorAll(settings.formSelector));\n  formList.forEach(function (formElement) {\n    formElement.addEventListener('submit', function (evt) {\n      evt.preventDefault();\n    });\n    setEventListeners(formElement, settings);\n  });\n}\n\n\n//# sourceURL=webpack://mesto/./src/scripts/validation.js?");
+
+/***/ }),
+
+/***/ "./src/pages/index.css":
+/*!*****************************!*\
+  !*** ./src/pages/index.css ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://mesto/./src/pages/index.css?");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/scripts/index.js");
+/******/ 	
+/******/ })()
+;
