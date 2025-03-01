@@ -1,4 +1,4 @@
-export const presets = [
+const presets = [
     ['@babel/preset-env', {
         targets: {
             edge: '17',
@@ -11,3 +11,5 @@ export const presets = [
         corejs: 3.40,
     }]
 ];
+
+module.exports = { presets };

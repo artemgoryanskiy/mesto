@@ -46,19 +46,10 @@ function updateSubmitButtonState(submitButton, isLoading) {
 }
 
 function handleProfileEditClick() {
-	resetPopupForm(editProfileFormElement, validationConfig);
 	nameInput.value = profileTitle.textContent;
 	jobInput.value = profileDescription.textContent;
-	const submitButton = editProfileFormElement.querySelector(validationConfig.submitButtonSelector);
-	if (editProfileFormElement.checkValidity()) {
-		submitButton.classList.remove(validationConfig.inactiveButtonClass);
-		submitButton.disabled = false;
-	} else {
-		submitButton.classList.add(validationConfig.inactiveButtonClass);
-		submitButton.disabled = true;
-	}
-
 	openModal(profileEditPopup);
+	clearValidation(editProfileFormElement, validationConfig)
 }
 
 function handleAddCardClick() {
@@ -73,6 +64,7 @@ function handleAvatarClick() {
 
 function openCardImage(imageData) {
 	elementImage.src = imageData.link;
+	elementImage.alt = `Фотография с изображением ${imageData.name}`;
 	elementCaption.textContent = imageData.name;
 	openModal(popupTypeImage);
 }
@@ -84,8 +76,7 @@ function onDeletePopup(cardData, cardElement) {
 
 function handleEditProfile(evt) {
 	evt.preventDefault();
-	const submitButton = evt.target.querySelector('.popup__button');
-	updateSubmitButtonState(submitButton, true);
+	updateSubmitButtonState(evt.submitter, true);
 	updateUserProfile(nameInput.value, jobInput.value)
 		.then((updatedUser) => {
 			profileTitle.textContent = updatedUser.name;
@@ -95,20 +86,17 @@ function handleEditProfile(evt) {
 		.catch(err => console.error('Ошибка при обновлении профиля:', err
 		))
 		.finally(() => {
-			updateSubmitButtonState(submitButton, false);
+			updateSubmitButtonState(evt.submitter, false);
 		});
 }
 
 function handleNewCardSubmit(evt) {
 	evt.preventDefault();
-	const submitButton = evt.target.querySelector('.popup__button');
-	updateSubmitButtonState(submitButton, true);
-
+	updateSubmitButtonState(evt.submitter, true);
 	const newCardData = {
 		name: newCardFormElement['place-name'].value,
 		link: newCardFormElement['link'].value
 	};
-
 	addCard(newCardData)
 		.then(newCard => {
 			placesList.prepend(createCard(newCard, onDeletePopup, handleLikeToggle, openCardImage));
@@ -117,15 +105,14 @@ function handleNewCardSubmit(evt) {
 		.catch(err => console.error('Ошибка при добавлении карточки:', err
 		))
 		.finally(() => {
-			updateSubmitButtonState(submitButton, false);
+			updateSubmitButtonState(evt.submitter, false);
 		});
 }
 
 function handleAvatarSubmit(evt) {
 	evt.preventDefault();
-	const submitButton = evt.target.querySelector('.popup__button');
 	const avatarUrl = updateAvatarFormElement.avatar.value;
-	updateSubmitButtonState(submitButton, true);
+	updateSubmitButtonState(evt.submitter, true);
 	updateUserAvatar(avatarUrl)
 		.then(updatedUser => {
 			profileImage.style.backgroundImage = `url(${updatedUser.avatar})`;
@@ -134,7 +121,7 @@ function handleAvatarSubmit(evt) {
 		.catch(err => console.error('Ошибка при обновлении аватара:', err
 		))
 		.finally(() => {
-			updateSubmitButtonState(submitButton, false);
+			updateSubmitButtonState(evt.submitter, false);
 		});
 }
 
